@@ -2060,6 +2060,15 @@
         }
         return 0;
     }
+    // Preço "de" (riscado) do produto principal na página — Nuvemshop .js-compare-price-display
+    function comparePrice() {
+        var els = document.querySelectorAll('.js-compare-price-display, .price-compare, [data-compare-price]');
+        for (var i = 0; i < els.length; i++) {
+            if (els[i].closest('[class*="card"],[class*="related"],[class*="carousel"],[class*="swiper"],[class*="item-product"],.js-item-product,#q-modal-ia') || els[i].offsetParent === null) continue;
+            var v = num(els[i].innerText || els[i].textContent); if (v > 0) return v;
+        }
+        return 0;
+    }
     function parcela(t) {
         t = String(t || '').normalize('NFC').replace(/\s+/g, ' ').trim();
         var m = t.match(/(\d+)\s*x\s*(?:de\s*)?(R?\$?\s*[\d.,]+)\s*(.*)$/i);
@@ -2155,7 +2164,12 @@
             var box = $('pl-rl-price');
             if (!box) { box = document.createElement('div'); box.id = 'pl-rl-price'; box.className = 'pl-rl-price'; info.appendChild(box); }
             var h = '';
-            if (full > 0 && av > 0) {
+            var cmp = comparePrice();
+            if (full > 0 && cmp > full * 1.01) {
+                // produto em promoção: igual à página (de riscado, por grande, -% da promo) + preço no Pix embaixo
+                var pctc = Math.round((1 - full / cmp) * 100);
+                h += '<div class="pl-rl-old">' + brl(cmp) + '</div><div class="pl-rl-line"><div class="pl-rl-big">' + brl(full) + '</div>' + (pctc > 0 ? '<span class="pl-rl-tag">-' + pctc + '%</span>' : '') + '</div>' + (av > 0 && av < full ? '<div class="pl-rl-sub">ou <b>' + brl(av) + '</b> no Pix</div>' : '');
+            } else if (full > 0 && av > 0) {
                 var pct = Math.round((1 - av / full) * 100);
                 h += '<div class="pl-rl-old">' + brl(full) + '</div><div class="pl-rl-line"><div class="pl-rl-big">' + brl(av) + '</div>' + (pct > 0 ? '<span class="pl-rl-tag">-' + pct + '%</span>' : '') + '</div><div class="pl-rl-sub">à vista com desconto</div>';
             } else if (full > 0) {
