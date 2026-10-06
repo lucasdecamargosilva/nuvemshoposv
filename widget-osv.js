@@ -2168,7 +2168,7 @@
             if (full > 0 && cmp > full * 1.01) {
                 // produto em promoção: igual à página (de riscado, por grande, -% da promo) + preço no Pix embaixo
                 var pctc = Math.round((1 - full / cmp) * 100);
-                h += '<div class="pl-rl-old">' + brl(cmp) + '</div><div class="pl-rl-line"><div class="pl-rl-big">' + brl(full) + '</div>' + (pctc > 0 ? '<span class="pl-rl-tag">-' + pctc + '%</span>' : '') + '</div>' + (av > 0 && av < full ? '<div class="pl-rl-sub">ou <b>' + brl(av) + '</b> no Pix</div>' : '');
+                h += '<div class="pl-rl-old">' + brl(cmp) + '</div><div class="pl-rl-line"><div class="pl-rl-big">' + brl(full) + '</div>' + (pctc > 0 ? '<span class="pl-rl-tag">-' + pctc + '%</span>' : '') + '</div>' + (av > 0 && av < full ? '<div class="pl-rl-sub"><b>' + brl(av) + '</b> no Pix</div>' : '');
             } else if (full > 0 && av > 0) {
                 var pct = Math.round((1 - av / full) * 100);
                 h += '<div class="pl-rl-old">' + brl(full) + '</div><div class="pl-rl-line"><div class="pl-rl-big">' + brl(av) + '</div>' + (pct > 0 ? '<span class="pl-rl-tag">-' + pct + '%</span>' : '') + '</div><div class="pl-rl-sub">à vista com desconto</div>';
