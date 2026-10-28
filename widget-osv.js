@@ -949,6 +949,18 @@ setInterval(function(){var el=document.getElementById('q-step-error');if(!el)ret
 
 
     function init() {
+        // --- CHECAGEM DE PLANO (endpoint central pl-plano-check): loja desligada ou plano estourado => esconde o provador ---
+        try {
+            fetch('https://n8n.segredosdodrop.com/webhook/pl-plano-check', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ dominio: location.hostname }) })
+                .then(function (r) { return r.json(); })
+                .then(function (d) {
+                    if (!d || d.plan_limit !== true) return;
+                    window.__plPlanLimit = true;
+                    try { var st = document.createElement('style'); st.id = 'pl-plan-limit-hide'; st.textContent = '#q-open-ia,.q-btn-trigger-ia,.q-btn-inline-provador,.q-inline-wrapper-osv,#q-modal-ia{display:none !important}'; document.head.appendChild(st); } catch (_) {}
+                    try { document.querySelectorAll('#q-open-ia,.q-btn-trigger-ia,.q-btn-inline-provador,.q-inline-wrapper-osv,#q-modal-ia').forEach(function (el) { el.style.setProperty('display', 'none', 'important'); }); } catch (_) {}
+                })
+                .catch(function () {});
+        } catch (_) {}
         // --- FILTRO DE CATEGORIA (HAT) ---
         const productNameNormalized = (document.querySelector('h1.product__title,.product-single__title,h1')?.innerText || document.title).toUpperCase();
         if (productNameNormalized.includes('HAT')) {
